@@ -1,34 +1,57 @@
-# Netty Discard Server Example
+# Chetty
 
-A minimal maven project using [Netty][1].
-This [sample code][2] is from taken from the netty distribution.
+A simple chat server using [Netty][1].
 
 [1]: http://www.jboss.org/netty
-[2]: http://docs.jboss.org/netty/3.2/xref/org/jboss/netty/example/discard/package-summary.html
 
-## Notes
+## Building and Running
 
-This maven project also includes ```.project``` and ```.classpath``` files 
-and thus is a valid eclipse project. To be able to build it using eclipse,
-you need to pull the dependencies though. You can trigger that by
+This is a Maven project, so
 
     mvn package
-    
-and maybe some way easier; not into maven so deep (yet).
 
-## Archetypes
+should do the job to build an package the sources.
 
-To create an archetype from this project you can use:
+There are also Eclipse metadata files, so you can import the project
+to your existing workspace and simply run it (You might actually
+need to install [m2eclipse][2] and configure the classpath variable
+```M2RPO```).
 
-    mvn archetype:create-from-project
+[2]: http://m2eclipse.sonatype.org/
 
-To install the archetype in your local maven repo use:
+## Usage
 
-    cd target/generated-sources/archetype/
-    mvn install
+Once the server is running, you use telnet to connect to it:
 
-To create a project from your archetype use:
+    telnet localhost 8080
 
-    mvn archetype:generate -DarchetypeCatalog=local
+Connected, you have to register first:
 
-and select yours.
+    /r someone
+
+Then you can list all registered users:
+
+    /ul
+
+And finally establish a chat session with one of them:
+
+    /q anotherone
+
+Then, everything you type gets sent to your chat partner(s) when you
+hit enter. When you are tired of your peer you can end the session
+by typing:
+
+    /l
+
+
+## Architecture
+
+When designing the server i tried to leverage the handler pipline as
+much as i could. So, instead of a single (business logic) handler
+parsing strings and one giant switch statement (or even worse: an
+if-else if cascade), each command is implemented as a separate
+handler. Each handler gets to look at a string the user sends an
+decides if it should act about it. If the handler decides it`s
+responsible it handles the request and the processing stops.
+Otherwise the next handler get`s a go.
+

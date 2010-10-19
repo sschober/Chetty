@@ -51,7 +51,7 @@ much as i could. So, instead of a single (business logic) handler
 parsing strings and one giant switch statement (or even worse: an
 if-else if cascade), each command is implemented as a separate
 handler. Each handler gets to look at a string the user sends an
-decides if it should act about it. If the handler decides it`s
+decides if it should act about it. If the handler decides it's
 responsible it handles the request and the processing stops.
-Otherwise the next handler get`s a go.
+Otherwise the next handler get's a go.
 
